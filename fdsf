@@ -1,0 +1,53 @@
+// GradeException.java
+public class GradeException extends Exception {
+    public static final char[] VALID_GRADES = {'A', 'B', 'C', 'D', 'F', 'T'};
+
+    public GradeException(String message) {
+        super(message);
+    }
+}
+
+
+// TestGrade.java
+import java.util.Scanner;
+
+public class TestGrade {
+    public static void main(String[] args) {
+        int[] studentIDs = {101, 102, 103, 104, 105, 106, 107, 108, 109, 110};
+        char[] grades = new char[studentIDs.length];
+
+        Scanner scanner = new Scanner(System.in);
+
+        for (int i = 0; i < studentIDs.length; i++) {
+            System.out.print("Enter test letter grade for student " + studentIDs[i] + ": ");
+            char grade = scanner.next().toUpperCase().charAt(0);
+            try {
+                validateGrade(grade);
+                grades[i] = grade;
+            } catch (GradeException e) {
+                System.out.println("Invalid grade entered. Setting grade to 'T' (Incomplete).");
+                grades[i] = 'T';
+            }
+        }
+
+        System.out.println("\nStudent IDs and Grades:");
+        for (int i = 0; i < studentIDs.length; i++) {
+            System.out.println("Student ID: " + studentIDs[i] + ", Grade: " + grades[i]);
+        }
+
+        scanner.close();
+    }
+
+    public static void validateGrade(char grade) throws GradeException {
+        boolean isValid = false;
+        for (char validGrade : GradeException.VALID_GRADES) {
+            if (grade == validGrade) {
+                isValid = true;
+                break;
+            }
+        }
+        if (!isValid) {
+            throw new GradeException("Invalid grade entered: " + grade);
+        }
+    }
+}
